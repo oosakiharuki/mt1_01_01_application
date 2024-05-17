@@ -428,9 +428,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{0,0,0}
 		};
 
-		if (keys[DIK_SPACE]) {
-			cross.y += 0.1f;
-		}
+		cross.y += 0.1f;
+
 		
 
 
@@ -467,8 +466,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 
 		VectorScreenPrintf(0, 0, cross, "Cross");
-
-		MatrixScreenPrintf(0, 40, WorldViewProjectionMatrix, "Cross");
 
 		if (WorldViewProjectionMatrix.m[2][3] < 0) {
 			Novice::DrawTriangle(int(screenVertice[0].x), int(screenVertice[0].y), int(screenVertice[1].x), int(screenVertice[1].y), int(screenVertice[2].x), int(screenVertice[2].y), RED, kFillModeSolid);
