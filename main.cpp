@@ -433,8 +433,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		
 
 
-		Vector3 rotate{ 0.0f,cross.y,0.0f };
+		Vector3 rotate{ 0.0f,0.0f,0.0f };
 
+		rotate.y += cross.y;
 
 		Vector3 translate{ rightLeftMove,0.0f ,0.0f + nearFarMove };
 
@@ -467,7 +468,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		VectorScreenPrintf(0, 0, cross, "Cross");
 
-		if (WorldViewProjectionMatrix.m[2][3] < 0) {
+		if (WorldViewProjectionMatrix.m[2][3] > 0) {
 			Novice::DrawTriangle(int(screenVertice[0].x), int(screenVertice[0].y), int(screenVertice[1].x), int(screenVertice[1].y), int(screenVertice[2].x), int(screenVertice[2].y), RED, kFillModeSolid);
 		}
 
