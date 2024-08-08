@@ -375,8 +375,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Novice::Initialize(kWindowTitle, 1280, 720);
 
 	// キー入力結果を受け取る箱
-	char keys[256] = {0};
-	char preKeys[256] = {0};
+	char keys[256] = { 0 };
+	char preKeys[256] = { 0 };
 
 	float rightLeftMove = 0;
 	float nearFarMove = 0;
@@ -384,6 +384,20 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Vector3 v1 = { 1.2f,-3.9f,2.5f };
 	Vector3 v2 = { 2.8f,0.4f,-1.3f };
 	Vector3 cross = Cross(v1, v2);
+
+	Vector3 rotate{ 0.0f,0.0f,0.0f };
+
+	Vector3 kLocalVartices[3] = {
+		{-0.5f ,-0.5f ,0.0f  },
+		{0.0f , 0.5f , 0.0f  },
+		{0.5f ,-0.5f ,0.0f  }
+	};
+
+	Vector3 screenVertice[3] = {	
+		{0,0,0},
+		{0,0,0},
+		{0,0,0}
+	};
 
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
@@ -414,28 +428,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			nearFarMove -= 0.01f;
 		}
 
-		Vector3 kLocalVartices[3] = {
-			{-0.5f ,-0.5f ,0.0f  },
-			{0.0f , 0.5f , 0.0f  },
-			{0.5f ,-0.5f ,0.0f  }
-		};
 
 
-
-		Vector3 screenVertice[3] = {
-		{0,0,0},
-		{0,0,0},
-		{0,0,0}
-		};
-
-		cross.y += 0.1f;
-
-		
-
-
-		Vector3 rotate{ 0.0f,0.0f,0.0f };
-
-		rotate.y += cross.y;
+		rotate.y += 0.03f;
 
 		Vector3 translate{ rightLeftMove,0.0f ,0.0f + nearFarMove };
 
@@ -468,7 +463,26 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		VectorScreenPrintf(0, 0, cross, "Cross");
 
-		if (WorldViewProjectionMatrix.m[2][3] > 0) {
+		Vector3 A = {
+			screenVertice[0].x - screenVertice[1].x,		
+			screenVertice[0].y - screenVertice[1].y,
+			screenVertice[0].z - screenVertice[1].z
+		};
+
+
+		Vector3 B = {
+			screenVertice[1].x - screenVertice[2].x,
+			screenVertice[1].y - screenVertice[2].y,
+			screenVertice[1].z - screenVertice[2].z
+		};
+
+
+
+		Vector3 IsFront = Cross(A,B);
+
+		if (cameraPosition.x * IsFront.x < 0 ||
+			cameraPosition.y * IsFront.y < 0 ||
+			cameraPosition.z * IsFront.z < 0) {
 			Novice::DrawTriangle(int(screenVertice[0].x), int(screenVertice[0].y), int(screenVertice[1].x), int(screenVertice[1].y), int(screenVertice[2].x), int(screenVertice[2].y), RED, kFillModeSolid);
 		}
 
